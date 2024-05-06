@@ -548,30 +548,30 @@ function Calculate() {
         var td=tr.insertCell(-1);
         if (withNds) {
             //td.style.backgroundColor="#ebf5f0";
-            td.className="cal_or bg-orange-100";
+            td.className="cal_or bg-orange-300";
             td.innerHTML='<div align="center" class="cal_or">'+tableObj.id+'</div>';
             td=tr.insertCell(-1);//td.style.backgroundColor="#ebf5f0";
-            td.className="cal_or bg-orange-100";
+            td.className="cal_or bg-orange-300";
             td.innerHTML='<div align="center">'+number_format(tableObj.cost)+'</div>';
             td=tr.insertCell(-1);
             //td.style.backgroundColor="#ebf5f0";
-            td.className="cal_or bg-orange-100";
+            td.className="cal_or bg-orange-300";
             td.innerHTML='<div align="center">'+number_format(tableObj.cost_nds)+'</div>';
             td=tr.insertCell(-1);//td.style.backgroundColor="#ebf5f0";
-            td.className="cal_or bg-orange-100";
+            td.className="cal_or bg-orange-300";
             td.innerHTML='<div align="center">'+number_format(tableObj.leasing_rate)+'</div>';
             td=tr.insertCell(-1);//td.style.backgroundColor="#ebf5f0";
-            td.className="cal_or bg-orange-100";
+            td.className="cal_or bg-orange-300";
             td.innerHTML='<div align="center">'+number_format(tableObj.leasing_rate_nds)+'</div>';
             td=tr.insertCell(-1);
             //td.style.backgroundColor="#ebf5f0";
-            td.className="cal_or bg-orange-100";
+            td.className="cal_or bg-orange-300";
             td.innerHTML='<div align="center">'+number_format(tableObj.payment)+'</div>';
             td=tr.insertCell(-1);//td.style.backgroundColor="#ebf5f0";
-            td.className="cal_or bg-orange-100";
+            td.className="cal_or bg-orange-300";
             td.innerHTML='<div align="center">'+number_format(tableObj.payment_nds)+'</div>';
             td=tr.insertCell(-1);
-            td.className="cal_or bg-orange-100";
+            td.className="cal_or bg-orange-300";
             //td.style.backgroundColor="#ebf5f0";
             td.innerHTML='<div align="center" class="cal_or">'+number_format(tableObj.total)+'</div>';
             document.getElementById("aside_overall").innerHTML = '<header>Общая сумма выплат</header><p>'+number_format(tableObj.total + price_total)+'</p>';
@@ -584,17 +584,17 @@ function Calculate() {
 
             //td.style.backgroundColor="#ebf5f0";
             td.className="cal_or bg-orange-100";
-            td.innerHTML='<div align="center">'+number_format(tableObj.cost + tableObj.cost_nds)+'</div>';
+            td.innerHTML='<div align="center" id="compensationField">'+number_format(tableObj.cost + tableObj.cost_nds)+'</div>';
             td=tr.insertCell(-1);
 
             //td.style.backgroundColor="#ebf5f0";
             td.className="cal_or bg-orange-100";
-            td.innerHTML='<div align="center">'+number_format(tableObj.leasing_rate)+'</div>';
+            td.innerHTML='<div align="center" id="resultedLeaseRateField">'+number_format(tableObj.leasing_rate)+'</div>';
             td=tr.insertCell(-1);
 
             td.className="cal_or bg-orange-100";
             //td.style.backgroundColor="#ebf5f0";
-            td.innerHTML='<div align="center" class="cal_or">'+number_format(tableObj.total)+'</div>';
+            td.innerHTML='<div align="center" class="cal_or" id="resultCostField">'+number_format(tableObj.total)+'</div>';
             document.getElementById("aside_overall").innerHTML = '<header>Общая сумма выплат</header><p>'+number_format(tableObj.total + price_total)+'</p>';
             document.getElementById("aside_overall_nds").innerHTML = '';
         }

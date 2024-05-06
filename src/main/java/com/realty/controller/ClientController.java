@@ -9,13 +9,14 @@ import java.net.URLConnection;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+import com.realty.model.Advertisement;
+import com.realty.model.LeasComparisonOptions;
+import com.realty.model.LeasOption;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import com.realty.model.User;
 import com.realty.service.AdvertisementService;
@@ -25,9 +26,11 @@ import com.realty.webConfig.DateFormatter;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 @RequestMapping("/client")
+@SessionAttributes("leasComparison")
 public class ClientController {
 
 	@Autowired
@@ -38,6 +41,25 @@ public class ClientController {
 
 	@Autowired
 	private ScheduleService scheduleService;
+
+	@ModelAttribute(name="leasComparisonOptions")
+	public LeasComparisonOptions comparison(){
+		return new LeasComparisonOptions();
+	}
+
+	@ModelAttribute(name="leasOption")
+	public LeasOption leasOption() {
+		return new LeasOption();
+	}
+
+	@PostMapping("/addLeasOption")
+	public String addAdvertisement(Model model, LeasOption leasOption,
+								   @ModelAttribute LeasComparisonOptions leasComparisonOptions) {
+		leasComparisonOptions.addLeasOption(leasOption);
+		System.out.println(leasOption.toString());
+		leasComparisonOptions.printObj();
+		return "redirect:/client/leasingCalc";
+	}
 
 	@GetMapping
 	public String client(Model model, @AuthenticationPrincipal User user) {
@@ -62,21 +84,7 @@ public class ClientController {
 	}
 
 	@GetMapping("/leasingCalc")
-	public String leasingCalc(Model mode) throws IOException {
-		URL url = new URL("http://localhost:8080/client");
-		URLConnection connection = url.openConnection();
-		try (BufferedReader in = new BufferedReader(
-				new InputStreamReader(connection.getInputStream()))) {
-			String line;
-			while ((line = in.readLine()) != null) {
-               /* JSONObject obj = new JSONObject(line);
-                String html = obj.getString("html");
-                Document document = Jsoup.parse(html);
-                Elements paragraphs = document.getElementsByClass("nf-route__time");
-*/
-				System.out.println(line);
-			}
-		}
+	public String leasingCalc(Model mode) {
 		return "client.leasingCalc";
 	}
 

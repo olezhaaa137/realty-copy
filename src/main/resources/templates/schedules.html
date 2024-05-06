@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{realtor :: realtorHead}">
+</head>
+<body class="bg-white font-serif font-light text-white">
+	<div class="bg-[url('/images/bgHeader.jpg')] bg-[position:center] bg-fixed bg-[size:cover]">
+		<div class="bg-opacity-75 bg-orange-600">
+			<div class="bg-transparent container px-10 pt-5 pb-10 m-auto">
+				<div class="flex items-center py-1 justify-between relative">
+					<div class="flex items-center">
+						<a th:href="@{/realtor/advertisements}"
+							class="mr-5 text-xl uppercase text-opacity-60 text-white font-semibold hover:tracking-[0.07em] hover:text-opacity-100 hover:scale-110 duration-300 ease-in-out">Объявления</a>
+						<a th:href="@{/realtor/schedule}"
+							class="mr-5 text-xl uppercase text-opacity-100 text-white font-semibold hover:tracking-[0.07em] hover:text-opacity-100 hover:scale-110 duration-300 ease-in-out">Расписание</a>
+					</div>
+					<div th:replace="~{realtor :: realtorAccount}">
+					</div>
+				</div>
+				
+		</div>
+	</div>
+	<div class="container px-10 py-5 pb-10 m-auto">
+		<div class="mb-3 mt-5 text-center uppercase text-[40px] text-gray-500 text-opacity-80 font-medium">Расписание</div>
+		<div class="flex items-center justify-between mt-5">
+			<a th:href="@{/realtor/addSchedule}" class="rounded-full bg-orange-700 text-lg uppercase hover:bg-orange-800 py-3 px-6 duration-300 ease-in-out focus:outline-none focus:shadow-outline">
+				Добавить расписание
+			</a>
+			<form  method="get" th:action="@{/realtor/findSchedules}" class="flex items-center">
+				<button type="submit">
+					<img th:src="@{/images/search.png}" class="w-[50px]"/>
+				</button>
+				<input type="text" th:name="findParam" id="findParam" class="ml-3 py-3 px-5 w-full rounded-full bg-gray-300 bg-opacity-100 appearance-none" placeholder="Поиск..." required />
+				<a th:href="@{/realtor/schedule}">
+					<img th:src="@{/images/broom.png}" class="ml-3 w-[40px]"/>
+				</a>
+			</form>              
+		</div>
+		<table class="w-full mt-5 table-auto border-collapse text-center" name="users" id="users">
+			<thead class="border-2 font-medium text-gray-500 border-gray-400">
+				<tr>
+					<th class="py-6 px-4">Название объявления</th>
+					<th class="py-6 px-4">Дата</th>
+					<th class="py-6 px-4">Время</th>
+					<th class="py-6 px-4">Статус</th>
+				</tr>
+			</thead>
+			<tbody>
+				<th:block th:if="!${schedules.isEmpty()}" th:each="schedule : ${schedules}">
+					<tr class="cursor-pointer text-gray-500 border-gray-400 border-2 duration-300 ease-in-out hover:bg-gray-300">
+						<td class="p-4" th:text="${schedule.advertisement.name}" th:href="@{/realtor/showSchedule(id=${schedule.id})}"></td>
+						<td class="p-4" th:text="${schedule.date}"></td>
+						<td class="p-4" th:text="${schedule.time}"></td>
+						<td class="p-4" th:text="${schedule.status}"></td>
+					</tr>
+				</th:block>
+			</tbody>
+		</table>
+		<div class="mt-5 text-red-500 text-lg" th:if="${schedules.isEmpty()}">Список пуст.</div>
+	</div>
+</body>
+<script th:src="@{/js/script.js}"></script>
+</html>

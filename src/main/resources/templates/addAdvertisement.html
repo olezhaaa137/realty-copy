@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{realtor :: realtorHead}">
+</head>
+
+<body class="bg-white font-serif font-light text-white">
+	<div class="bg-[url('/images/bgHeader.jpg')] bg-[position:center] bg-fixed bg-[size:cover]">
+		<div class="bg-opacity-75 bg-orange-600">
+			<div class="bg-transparent container px-10 pt-5 pb-10 m-auto">
+				<div class="flex items-center py-1 justify-between relative">
+					<div class="flex items-center">
+						<a th:href="@{/realtor/advertisements}"
+							class="mr-5 text-xl uppercase text-opacity-60 text-white font-semibold hover:tracking-[0.07em] hover:text-opacity-100 hover:scale-110 duration-300 ease-in-out">Объявления</a>
+						<a th:href="@{/realtor/schedule}"
+							class="mr-5 text-xl uppercase text-opacity-60 text-white font-semibold hover:tracking-[0.07em] hover:text-opacity-100 hover:scale-110 duration-300 ease-in-out">Расписание</a>
+					</div>
+					<div th:replace="~{realtor :: realtorAccount}">
+					</div>
+				</div>
+				
+			</div>
+		</div>
+	</div>
+	<div class="container px-10 py-5 pb-10 m-auto">
+		<div class="mb-3 mt-5 text-center uppercase text-[40px] text-gray-500 text-opacity-80 font-medium">Объявление</div>
+		<form method="post" th:action="@{/realtor/addAdvertisement}" th:object="${advertisement}" enctype="multipart/form-data" class="px-[360px] space-y-3">
+			<input type="hidden" name="id" id="id" th:field="*{id}">
+			<div>
+				<label for="name" class="text-gray-500 text-opacity-80 uppercase">Заголовок</label>
+				<input type="text" th:field="*{name}" name="name" id="name"
+					class="py-3 px-5 w-full rounded-full bg-gray-500 bg-opacity-50 appearance-none" required />
+				<div th:if="${errName}" class="text-red-500" th:text="${errName}"></div>
+			</div>
+			<div class="relative">
+				<label for="type" class="text-gray-500 text-opacity-80 uppercase">Тип объекта</label>
+				<select th:field="*{type}" class="block py-3 px-5 appearance-none w-full bg-gray-500 bg-opacity-50 rounded-full focus:outline-none focus:shadow-outline cursor-pointer" id="type" name="type">
+					<option value="Дом">Дом</option>
+					<option value="Квартира">Квартира</option>
+					<option value="Участок">Участок</option>
+				</select> 
+				<div class="pointer-events-none absolute inset-y-0 right-3 top-6 flex items-center px-2 text-gray-700">
+					<svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+				</div>
+			</div>
+			<div id="yearDiv">
+				<label for="year" class="text-gray-500 text-opacity-80 uppercase">Год постройки</label>
+				<input type="number" th:field="*{year}" name="year" id="year" min="1900"
+					class="py-3 px-5 w-full rounded-full bg-gray-500 bg-opacity-50 appearance-none" required />
+			</div>
+			<div>
+				<label for="totalArea" class="text-gray-500 text-opacity-80 uppercase">Общая площадь м²</label>
+				<input type="number" th:field="*{totalArea}" name="totalArea" id="totalArea" min="1"
+					class="py-3 px-5 w-full rounded-full bg-gray-500 bg-opacity-50 appearance-none" required />
+			</div>
+			<div id="livingAreaDiv">
+				<label for="livingArea" class="text-gray-500 text-opacity-80 uppercase">Жилая площадь м²</label>
+				<input type="number" th:field="*{livingArea}" name="livingArea" id="livingArea" min="1"
+					class="py-3 px-5 w-full rounded-full bg-gray-500 bg-opacity-50 appearance-none" required />
+			</div>
+			<div >
+				<label for="floor" id="floorLb" class="text-gray-500 text-opacity-80 uppercase hidden">Этаж</label>
+				<label for="floor" id="floorCountLb" class="text-gray-500 text-opacity-80 uppercase">Количество этажей</label>
+				<input type="number" th:field="*{floor}" name="floor" id="floor" min="1"
+					class="py-3 px-5 w-full rounded-full bg-gray-500 bg-opacity-50 appearance-none" required/>
+			</div>
+			<div class="relative" id="renovationsDiv">
+				<label for="renovations" class="text-gray-500 text-opacity-80 uppercase">Ремонт</label>
+				<select th:field="*{renovations}" class="block py-3 px-5 appearance-none w-full bg-gray-500 bg-opacity-50 rounded-full focus:outline-none focus:shadow-outline cursor-pointer" id="renovations" name="renovations">
+					<option value="Есть">Есть</option>
+					<option value="Нет">Нет</option>
+				</select> 
+				<div class="pointer-events-none absolute inset-y-0 right-3 top-6 flex items-center px-2 text-gray-700">
+					<svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+				</div>
+			</div>
+			<div class="relative">
+				<label for="water" class="text-gray-500 text-opacity-80 uppercase">Вода</label>
+				<select th:field="*{water}" class="block py-3 px-5 appearance-none w-full bg-gray-500 bg-opacity-50 rounded-full focus:outline-none focus:shadow-outline cursor-pointer" id="water" name="water">
+					<option value="Есть">Есть</option>
+					<option value="Нет">Нет</option>
+				</select> 
+				<div class="pointer-events-none absolute inset-y-0 right-3 top-6 flex items-center px-2 text-gray-700">
+					<svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+				</div>
+			</div>
+			<div class="relative">
+				<label for="gas" class="text-gray-500 text-opacity-80 uppercase">Газ</label>
+				<select th:field="*{gas}" class="block py-3 px-5 appearance-none w-full bg-gray-500 bg-opacity-50 rounded-full focus:outline-none focus:shadow-outline cursor-pointer" id="gas" name="gas">
+					<option value="Есть">Есть</option>
+					<option value="Нет">Нет</option>
+				</select> 
+				<div class="pointer-events-none absolute inset-y-0 right-3 top-6 flex items-center px-2 text-gray-700">
+					<svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+				</div>
+			</div>
+			<div class="relative">
+				<label for="light" class="text-gray-500 text-opacity-80 uppercase">Свет</label>
+				<select th:field="*{light}" class="block py-3 px-5  appearance-none w-full bg-gray-500 bg-opacity-50 rounded-full focus:outline-none focus:shadow-outline cursor-pointer" id="light" name="light">
+					<option value="Есть">Есть</option>
+					<option value="Нет">Нет</option>
+				</select> 
+				<div class="pointer-events-none absolute inset-y-0 right-3 top-6 flex items-center px-2 text-gray-700">
+					<svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+				</div>
+			</div>
+			<div>
+				<label for="geoposition" class="text-gray-500 text-opacity-80 uppercase">Местоположение</label>
+				<input type="text" th:field="*{geoposition}" name="geoposition" id="geoposition"
+					class="py-3 px-5 w-full rounded-full bg-gray-500 bg-opacity-50 appearance-none" required />
+			</div>
+			<div>
+				<label for="price" class="text-gray-500 text-opacity-80 uppercase">Цена BYN</label>
+				<input type="text" th:field="*{price}" name="price" id="price" pattern="\d+([.]{1}\d{1,2})?"
+					class="py-3 px-5 w-full rounded-full bg-gray-500 bg-opacity-50 appearance-none" required />
+			</div>
+			<div>
+				<label for="year" class="text-gray-500 text-opacity-80 uppercase">Фото</label>
+				<input type="file" th:name="photo" id="photo" 
+					class="block bg-gray-500 bg-opacity-50" accept="image/*" multiple required />
+			</div>
+			<div>
+				<label for="geoposition" class="text-gray-500 text-opacity-80 uppercase">Описание</label>
+				<textarea type="text" th:field="*{description}" name="description" id="description" rows="20"
+					class="py-3 px-5 w-full rounded-lg bg-gray-500 bg-opacity-50 appearance-none" required>
+				</textarea>
+			</div>
+			<div class="pt-5">
+				<button type="submit"
+					class="w-full rounded-full bg-orange-700 text-lg uppercase hover:bg-orange-800 p-3 duration-300 ease-in-out focus:outline-none focus:shadow-outline">
+					Добавить
+				</button>
+			</div>
+		</form>
+	</div>
+</body>
+<script th:src="@{/js/script.js}"></script>
+</html>

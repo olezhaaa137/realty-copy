@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"> 
+	<head>
+		<title>Realty</title> 
+		<link rel="stylesheet" th:href="@{/css/main.css}" />
+        
+	</head>
+	<body class="bg-[#ffffff] font-serif font-light text-white">
+		<div class="container p-10 m-auto">
+            <div class="w-full mt-10 max-w-[500px] m-auto bg-grey-500 bg-[position:center] bg-[size:cover] shadow-2xl justify-center">
+                <form class="bg-opacity-[.85] bg-grey-100 px-14 pb-52 pt-20" method="POST" th:action="@{/login}"> 
+                    <div class="flex items-center">
+                        <a class="text-black block w-fit pb-1   border-orange-700 uppercase text-2xl font-semibold" th:href="@{/login}">Вход</a>
+                        <a class="block w-fit pb-1 uppercase text-2xl text-gray-500 text-opacity-80 font-semibold ml-5" th:href="@{/registration}">Регистрация</a>
+                    </div>
+                    <div class="mt-5">
+                        <label for="username" class="text-gray-500 text-opacity-80 uppercase">Логин</label>
+                        <input type="text" name="username" id="username" class="py-3 px-5 w-full rounded-full bg-gray-500 bg-opacity-50 appearance-none" required />
+                    </div>
+                    <div class="mt-5">
+                        <label for="password" class="text-gray-500 text-opacity-80 uppercase">Пароль</label>
+                        <input type="password" name="password" id="password" class="py-3 px-5 w-full rounded-full bg-gray-500 bg-opacity-50 appearance-none" required />
+                    </div>
+                    <div th:if="${err}" class="text-red-500 mt-1" th:text="${err}"></div>
+                    <div class="mt-8">
+                        <button type="submit" class="w-full rounded-full bg-gray-500 text-lg uppercase p-3 duration-300 ease-in-out focus:outline-none focus:shadow-outline">
+                            Вход
+                        </button>
+                    </div>
+                </form>
+            </div>
+		</div>
+	</body> 
+</html>

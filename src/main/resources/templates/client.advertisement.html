@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{client :: clientHead}">
+</head>
+<body class="bg-white font-serif font-light text-white">
+	<div class="bg-[url('/images/bgHeader.jpg')] bg-[position:center] bg-fixed bg-[size:cover]">
+		<div class="bg-opacity-75 bg-orange-600">
+			<div class="bg-transparent container px-10 pt-5 pb-10 m-auto">
+				<div class="flex items-center py-1 justify-between relative">
+					<div class="flex items-center">
+						<a th:href="@{/client/advertisements}"
+							class="mr-5 text-xl uppercase text-opacity-100 text-white font-semibold hover:tracking-[0.07em] hover:text-opacity-100 hover:scale-110 duration-300 ease-in-out">Объявления</a>
+						<a th:href="@{/client/schedule}"
+							class="mr-5 text-xl uppercase text-opacity-60 text-white font-semibold hover:tracking-[0.07em] hover:text-opacity-100 hover:scale-110 duration-300 ease-in-out">Расписание</a>
+					</div>
+					<div th:replace="~{client :: clientAccount}">
+					</div>
+				</div>
+				
+			</div>
+		</div>
+	</div>
+	<div class="container px-10 py-5 pb-10 m-auto">
+		<div>
+			<div th:text="${advertisement.name}" class="w-[800px] mb-3 mt-5 uppercase text-3xl text-gray-950 text-opacity-80 font-medium"></div>
+		</div>
+		<div class="flex mt-10 justify-between">
+			<div class="max-w-[800px]">
+				<div id="main_img" th:each="photo,i : ${advertisement.photos}" th:if="${i.index}==0">
+					<img th:src="${photo.image}" class="rounded-sm w-[800px]">
+				</div>
+				<div id="img_list" class="flex flex-wrap items-center space-x-3">
+					<img th:each="photo,i : ${advertisement.photos}" class="w-[150px] py-3 cursor-pointer rounded-sm" th:src="${photo.image}">
+				</div>
+				<div class="bg-gray-500 bg-opacity-50 p-10 rounded-md space-y-2">
+					<div class="text-xl font-semibold">Параметры объекта</div>
+					<div class="flex items-center">
+						<div class="text-lg font-medium mr-2">Тип объекта:</div>
+						<div th:text="${advertisement.type}" class="text-lg"></div>
+					</div>
+					<div th:if="${advertisement.year}" class="flex items-center">
+						<div class="text-lg font-medium mr-2">Год постройки:</div>
+						<div th:text="${advertisement.year}" class="text-lg"></div>
+					</div>
+					<div th:if="${advertisement.totalArea}" class="flex items-center">
+						<div class="text-lg font-medium mr-2">Общая площадь:</div>
+						<div th:text="${advertisement.totalArea}+' м²'" class="text-lg"></div>
+					</div>
+					<div th:if="${advertisement.livingArea}" class="flex items-center">
+						<div class="text-lg font-medium mr-2">Жилая площадь:</div>
+						<div th:text="${advertisement.livingArea}+' м²'" class="text-lg"></div>
+					</div>
+					<div th:if="${advertisement.floor}" class="flex items-center">
+						<div class="text-lg font-medium mr-2" th:text="${advertisement.type.equals('Дом')} ? 'Уровней в доме:' : (${advertisement.type.equals('Квартира')} ? 'Этаж:')"></div>
+						<div th:text="${advertisement.floor}" class="text-lg"></div>
+					</div>
+					<div th:if="${advertisement.renovations}" class="flex items-center">
+						<div class="text-lg font-medium mr-2">Ремонт:</div>
+						<div th:text="${advertisement.renovations}" class="text-lg"></div>
+					</div>
+					<div th:if="${advertisement.water}" class="flex items-center">
+						<div class="text-lg font-medium mr-2">Вода:</div>
+						<div th:text="${advertisement.water}" class="text-lg"></div>
+					</div>
+					<div th:if="${advertisement.gas}" class="flex items-center">
+						<div class="text-lg font-medium mr-2">Газ:</div>
+						<div th:text="${advertisement.gas}" class="text-lg"></div>
+					</div>
+					<div th:if="${advertisement.light}" class="flex items-center">
+						<div class="text-lg font-medium mr-2">Свет:</div>
+						<div th:text="${advertisement.light}" class="text-lg"></div>
+					</div>
+				</div>
+				<div class="bg-gray-500 bg-opacity-50 p-10 rounded-md space-y-2 mt-5">
+					<div class="text-xl font-semibold">Описание</div>
+					<div th:text="${advertisement.description}"></div>
+				</div>
+				<div class="mb-3 mt-5 uppercase text-3xl text-gray-500 text-opacity-80 font-medium">Мы находимся тут</div>
+				<iframe src="https://yandex.ru/map-widget/v1/?um=constructor%3A95dc4d233d60320c32a13975bf2a377272ec7cf41e35f2f80e86bb71762c39be&amp;source=constructor" width="500" height="400" frameborder="0"></iframe>
+			</div>
+			<div>
+				<div class="bg-gray-500 bg-opacity-50 p-10 pl-10 pr-20 space-y-2 h-fit rounded-md ml-10">
+					<div th:text="${advertisement.price}+' BYN'" class="text-3xl font-semibold"></div>
+					<div th:text="${advertisement.realtor.name} + ' ' + ${advertisement.realtor.surname}" class="text-lg"></div>
+					<div th:text="${advertisement.realtor.phone}" class="text-lg"></div>
+					<a class="block mt-3 italic underline" th:if="!${look}" th:href="@{/client/addSchedule(id=${advertisement.id})}">
+						Записаться на просмотр
+					</a>
+					<form method="post" th:if="${look}" th:action="@{/client/addSchedule}">
+						<input type="hidden" th:name="id" th:value="${advertisement.id}" id="id">
+						<div class="mb-3 flex items-center" th:if="${dates} and !${dates.isEmpty()}" id="dateDiv" name="dateDiv">
+							<div class="relative">
+								<label for="date" class="uppercase">Выберите дату</label>
+								<select th:name="date" class="block py-3 px-5 appearance-none w-full bg-gray-500 bg-opacity-50 rounded-full focus:outline-none focus:shadow-outline cursor-pointer" id="dateClient" th:href="${advertisement.id}">
+									<option th:each="date : ${dates}" th:value="${date}" th:text="${date}">
+									</option>
+								</select> 
+								<div class="pointer-events-none absolute inset-y-0 right-1 top-6 flex items-center px-2 text-gray-700">
+									<svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+								</div>
+							</div>
+						</div>
+						<div class="mb-3 flex items-center" th:if="${times} and !${times.isEmpty()}" id="timesDiv" name="timesDiv">
+							<div class="relative">
+								<label for="time" class="uppercase">Выберите время</label>
+								<select th:name="time" class="block py-3 px-5 appearance-none w-full bg-gray-500 bg-opacity-50 rounded-full focus:outline-none focus:shadow-outline cursor-pointer" id="time">
+									<option th:each="time : ${times}" th:value="${time}" th:text="${time}">
+									</option>
+								</select> 
+								<div class="pointer-events-none absolute inset-y-0 right-1 top-6 flex items-center px-2 text-gray-700">
+									<svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+								</div>
+							</div>
+						</div>
+						<button th:if="${times} and !${times.isEmpty()} and ${dates} and !${dates.isEmpty()}" type="submit"
+							class="w-full mt-3 rounded-full bg-orange-700 text-lg uppercase hover:bg-orange-800 p-3 duration-300 ease-in-out focus:outline-none focus:shadow-outline">
+							Записаться
+						</button>
+						<div th:if="!${times} or ${times.isEmpty()} or !${dates} or ${dates.isEmpty()}" class="text-lg text-red-500">Свободных записей нет!</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+<script th:src="@{/js/script.js}"></script>
+</html>

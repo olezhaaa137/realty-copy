@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{client :: clientHead}">
+</head>
+<body class="bg-white font-serif font-light text-white">
+	<div class="bg-[url('/images/bgHeader.jpg')] bg-[position:center] bg-fixed bg-[size:cover]">
+		<div class="bg-opacity-75 bg-orange-600">
+			<div class="bg-transparent container px-10 pt-5 pb-10 m-auto">
+				<div class="flex items-center py-1 justify-between relative">
+					<div class="flex items-center">
+						<a th:href="@{/client/advertisements}"
+							class="mr-5 text-xl uppercase text-opacity-60 text-white font-semibold hover:tracking-[0.07em] hover:text-opacity-100 hover:scale-110 duration-300 ease-in-out">Объявления</a>
+						<a th:href="@{/client/schedule}"
+							class="mr-5 text-xl uppercase text-opacity-100 text-white font-semibold hover:tracking-[0.07em] hover:text-opacity-100 hover:scale-110 duration-300 ease-in-out">Расписание</a>
+					</div>
+					<div th:replace="~{client :: clientAccount}">
+					</div>
+				</div>
+	
+			</div>
+		</div>
+	</div>
+	<div class="container px-10 py-5 pb-10 m-auto">
+		<div>
+			<div th:text="${schedule.advertisement.name}" class="w-[800px] mb-3 mt-5 uppercase text-3xl text-gray-950 text-opacity-80 font-medium"></div>
+		</div>
+		<div class="flex mt-10 justify-between">
+			<div class="max-w-[800px]">
+				<div id="main_img" th:each="photo,i : ${schedule.advertisement.photos}" th:if="${i.index}==0">
+					<img th:src="${photo.image}" class="rounded-sm w-[800px]">
+				</div>
+				<div id="img_list" class="flex flex-wrap items-center space-x-3">
+					<img th:each="photo,i : ${schedule.advertisement.photos}" class="w-[150px] py-3 cursor-pointer rounded-sm" th:src="${photo.image}">
+				</div>
+				<div class="bg-gray-500 bg-opacity-50 p-10 rounded-md space-y-2">
+					<div class="text-xl font-semibold">Параметры объекта</div>
+					<div class="flex items-center">
+						<div class="text-lg font-medium mr-2">Тип объекта:</div>
+						<div th:text="${schedule.advertisement.type}" class="text-lg"></div>
+					</div>
+					<div th:if="${schedule.advertisement.year}" class="flex items-center">
+						<div class="text-lg font-medium mr-2">Год постройки:</div>
+						<div th:text="${schedule.advertisement.year}" class="text-lg"></div>
+					</div>
+					<div th:if="${schedule.advertisement.totalArea}" class="flex items-center">
+						<div class="text-lg font-medium mr-2">Общая площадь:</div>
+						<div th:text="${schedule.advertisement.totalArea}+' м²'" class="text-lg"></div>
+					</div>
+					<div th:if="${schedule.advertisement.livingArea}" class="flex items-center">
+						<div class="text-lg font-medium mr-2">Жилая площадь:</div>
+						<div th:text="${schedule.advertisement.livingArea}+' м²'" class="text-lg"></div>
+					</div>
+					<div th:if="${schedule.advertisement.floor}" class="flex items-center">
+						<div class="text-lg font-medium mr-2" th:text="${schedule.advertisement.type.equals('Дом')} ? 'Уровней в доме:' : (${schedule.advertisement.type.equals('Квартира')} ? 'Этаж:')"></div>
+						<div th:text="${schedule.advertisement.floor}" class="text-lg"></div>
+					</div>
+					<div th:if="${schedule.advertisement.renovations}" class="flex items-center">
+						<div class="text-lg font-medium mr-2">Ремонт:</div>
+						<div th:text="${schedule.advertisement.renovations}" class="text-lg"></div>
+					</div>
+					<div th:if="${schedule.advertisement.water}" class="flex items-center">
+						<div class="text-lg font-medium mr-2">Вода:</div>
+						<div th:text="${schedule.advertisement.water}" class="text-lg"></div>
+					</div>
+					<div th:if="${schedule.advertisement.gas}" class="flex items-center">
+						<div class="text-lg font-medium mr-2">Газ:</div>
+						<div th:text="${schedule.advertisement.gas}" class="text-lg"></div>
+					</div>
+					<div th:if="${schedule.advertisement.light}" class="flex items-center">
+						<div class="text-lg font-medium mr-2">Свет:</div>
+						<div th:text="${schedule.advertisement.light}" class="text-lg"></div>
+					</div>
+				</div>
+				<div class="bg-gray-500 bg-opacity-50 p-10 rounded-md space-y-2 mt-5">
+					<div class="text-xl font-semibold">Описание</div>
+					<div th:text="${schedule.advertisement.description}"></div>
+				</div>
+				<div class="mb-3 mt-5 uppercase text-3xl text-gray-500 text-opacity-80 font-medium">Мы находимся тут</div>
+				<iframe src="https://yandex.ru/map-widget/v1/?um=constructor%3A95dc4d233d60320c32a13975bf2a377272ec7cf41e35f2f80e86bb71762c39be&amp;source=constructor" width="500" height="400" frameborder="0"></iframe>
+			</div>
+			<div>
+				<div class="bg-gray-500 bg-opacity-50 p-10 pl-10 pr-20 space-y-2 h-fit rounded-md ml-10">
+					<div th:text="${schedule.advertisement.price}+' BYN'" class="text-3xl font-semibold"></div>
+					<div th:text="${schedule.advertisement.realtor.name} + ' ' + ${schedule.advertisement.realtor.surname}" class="text-lg"></div>
+					<div th:text="${schedule.advertisement.realtor.phone}" class="text-lg"></div>
+				</div>
+				<div class="bg-gray-500 mt-10 bg-opacity-50 p-10 space-y-2 h-fit rounded-md ml-10">
+					<div class="text-xl font-semibold">Расписание</div>
+					<div class="mt-5">
+						<label for="date" class="uppercase">Дата</label>
+						<div name="date" id="date" th:text="${schedule.date}"
+							class="py-3 px-5 w-full rounded-full bg-gray-500 bg-opacity-50 appearance-none"></div>
+					</div>
+					<div class="mt-3">
+						<label for="time" class="uppercase">Время</label>
+						<div name="time" id="time" th:text="${schedule.time}"
+							class="py-3 px-5 w-full rounded-full bg-gray-500 bg-opacity-50 appearance-none"></div>
+					</div>
+					<div class="mt-3">
+						<label for="fio" class="uppercase">ФИО клиента</label>
+						<div name="fio" id="fio" th:text="${schedule.client.surname}+' '+${schedule.client.name}+' '+${schedule.client.lastname}"
+							class="py-3 px-5 w-full rounded-full bg-gray-500 bg-opacity-50 appearance-none"></div>
+					</div>
+					<div class="mt-3">
+						<label for="phone" class="uppercase">Телефон клиента</label>
+						<div name="phone" id="phone" th:text="${schedule.client.phone}"
+							class="py-3 px-5 w-full rounded-full bg-gray-500 bg-opacity-50 appearance-none"></div>
+					</div>
+					<div th:if="${schedule.status.equals('Забронировано')} and ${check}==true" class="mt-3">
+						<a class="block w-full text-center mt-3 rounded-full bg-orange-700 text-lg uppercase hover:bg-orange-800 p-3 duration-300 ease-in-out focus:outline-none focus:shadow-outline" th:href="@{/client/deleteClientFromSchedule(id=${schedule.id})}">
+							Отменить запись
+						</a>
+					</div>
+					<div th:if="${schedule.status.equals('Продано')}" class="mt-3 text-red-500 text-2xl">
+						Продано вам!
+					</div>
+					<div th:if="${schedule.status.equals('Забронировано')} and ${check}==false" class="mt-3 text-red-500 text-2xl">
+						Уже продано!
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+<script th:src="@{/js/script.js}"></script>
+</html>

@@ -1,0 +1,20 @@
+{
+  "name": "realty",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "tailwindcss": "^3.3.1"
+  },
+  "dependencies": {
+    "@material-tailwind/html": "^2.0.0",
+    "flowbite": "^1.6.5",
+    "tw-elements": "^1.0.0-beta2"
+  }
+}

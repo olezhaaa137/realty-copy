@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{client :: clientHead}">
+<body>
+<div class="font-serif">
+    <div class="bg-opacity-75 bg-orange-600">
+        <div class="bg-transparent container px-10 pt-5 pb-10 m-auto">
+            <div class="flex items-center py-1 justify-between relative">
+                <div class="flex items-center">
+                    <a th:href="@{/client/advertisements}"
+                       class="mr-5 text-xl uppercase text-opacity-60 text-white font-semibold hover:tracking-[0.07em] hover:text-opacity-100 hover:scale-110 duration-300 ease-in-out">Объявления</a>
+                    <a th:href="@{/client/schedule}"
+                       class="mr-5 text-xl uppercase text-opacity-60 text-white font-semibold hover:tracking-[0.07em] hover:text-opacity-100 hover:scale-110 duration-300 ease-in-out">Расписание</a>
+                </div>
+                <div th:fragment="clientAccount">
+                    <button type="button" id="btnMenu" class="block ml-5">
+                        <img th:src="@{/images/user.png}" class="w-[40px]" />
+                    </button>
+                    <div id="menu" class="hidden p-5 space-y-3 absolute bg-gray-200 rounded-md top-12 -right-11">
+                        <a th:href="@{/client}" class="text-sm text-gray-500">Мой аккаунт</a>
+                        <a th:href="@{/client/leasingCalc}" class="block text-sm text-gray-500">Калькулятор лизинга</a>
+                        <form method="post" th:action="@{/logout}" class="flex items-center">
+                            <button type="submit" class="text-sm text-gray-500">
+                                Выйти
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        
+        </div>
+    </div>
+</div>
+    <div class="m-5" id="main_content">
+        <div class="mb-3 mt-5 text-center uppercase text-[40px] text-gray-500 text-opacity-80 font-medium">Калькулятор лизинга</div>
+        <div class="main_content_right">
+            <div class="leasing_documents calc_overall">
+                <div id="aside_overall_nds"></div>
+                <div id="aside_overall_pay"></div>
+                <div id="aside_monthly"></div>
+            </div>
+        </div>
+        <div class="main_content_general border-solid border-red-200 text-center">
+
+    
+    
+            <div class="supercalc">
+
+    
+                
+                <form action="" method="get" name="frmCalc" id="frmCalc" onsubmit="return false;">
+    
+                    <div class="w-auto">
+                        <div class="row flex justify-around border-b-4 border-gray-100">
+                            <div class="cell inline-block">
+                                <header class="inline-block">Стоимость объекта</header>
+                                <p><input class="w-auto ml-3 py-3 px-5 w-[150px] rounded-full bg-gray-300 bg-opacity-100 appearance-none" name="leasing_cost" type="text" id="leasing_cost_id" size="12" maxlength="19"></p>
+                                <p style="display: none;"><label><input name="currency" id="currency_rub" value="rub" checked="checked" onchange="SetLeasingRate(this.value)" type="radio">рубли</label></p>
+                                <p style="display: none;"><label><input name="currency" id="currency_usd" value="usd" onchange="SetLeasingRate(this.value)" type="radio">валюта</label></p>
+                            </div>
+                            
+                                
+                            <div class="cell inline-block">
+                                <header class="mr-[60px]">Ставка по лизингу</header>
+                                <p><label><input class="ml-3 py-3 px-5 w-[150px] rounded-full bg-gray-300 bg-opacity-100 appearance-none" size="3" maxlength="5" name="leasing_rate" id="leasing_rate_id" type="text">% годовых</label></p>
+                                <p style="visibility: hidden;"><label><input name="our_bid" id="our_bid_id" value="1" onchange="SetBid(this.checked)" checked="checked" type="checkbox"><span>другая ставка</span></label></p>
+                            </div>
+                            <div class="cell inline-block">
+                                <header class="mr-[60px]">Срок лизинга</header>
+                                <p><label><input class="w-auto ml-3 py-3 px-5 w-[150px] rounded-full bg-gray-300 bg-opacity-100 appearance-none" name="leasing_terms" id="leasing_terms_id" value="12" size="3" maxlength="3" type="number" min="12" max="300"> месяцев</label></p>
+                                <!-- <p><small>* - целое количество месяцев от 12 до 300</small></p> -->
+                            </div>
+                        </div>
+                        <div class="mt-5 pb-5 flex justify-around border-b-4 border-gray-100 w-[1450px]">
+                            <div class="cell inline-block">
+                                <header>Авансовый платёж</header>
+                                <p><input class="ml-3 py-3 px-5 w-[150px] rounded-full bg-gray-300 bg-opacity-100 appearance-none" name="advance_payment" id="advance_payment_id" size="15" maxlength="15" type="text"></p>
+                                <p><label><input class=""  name="advance_type" id="advance_type_percent" value="percent" checked="checked" onchange="SetAdvance()" type="radio">%</label><label><input name="advance_type" id="advance_type_money" value="money" onchange="SetAdvance()" type="radio">сумма</label></p>
+                                <p><small>участие собственными средствами</small></p>
+                            </div>
+                            <div class="cell inline-block">
+                                <header>Выкупная стоимость</header>
+                                <p><input class="ml-3 py-3 px-5 w-[150px] rounded-full bg-gray-300 bg-opacity-100 appearance-none" value="1" size="13" maxlength="13" name="purchase_price" id="purchase_price_id" type="text"></p>
+                                <p><label><input  name="purchase_price_type" id="purchase_price_type_percent" value="percent" checked="checked" onchange="SetPurchase()" type="radio">%</label><label><input name="purchase_price_type" id="purchase_price_type_money" value="money" onchange="SetPurchase()" type="radio">сумма</label></p>
+                                <p><small>от 0,1 до 25 %</small></p>
+                            </div>
+                            <div class="cell inline-block">
+                                <header>График выплат</header>
+                                <p><label><input name="metod" id="metod1" value="metod1" checked="checked" onchange="SetLeasingRate(this.value)" type="radio">обычный</label></p>
+                                <!-- <p><label><input name="metod" id="metod2" value="metod2" onchange="SetLeasingRate(this.value)" type="radio">аннуитетный</label></p> -->
+                            </div>
+                            <div class="cell form_submit">
+                                <header>&nbsp;</header>
+                                <p><input onclick="Calculate(); return false;" style="border:none;" type="button" value="Рассчитать" class="more_button rounded-full py-2 px-3 uppercase text-xs font-bold cursor-pointer tracking-wider bg-gray-100"></p>
+                                <p class="mt-5"><a class="underline uppercase text-gray-700 font-bold text-xs" href="#" onclick="Clear(); return false;">Очистить форму</a></p>
+                            </div>
+                        </div>
+                    </div>
+    
+                </form>
+    
+    
+    
+    
+                <div class = "text-center">
+
+                    <table class="table_cal_main" id="table.cal" align="center" cellpadding="0" cellspacing="2" width="100%">
+                        <colgroup>
+                            <col width="100">
+                            <col width="100">
+                            <col width="100">
+                            <col width="100">
+                            <col width="100">
+                            <col width="100">
+                            <col width="100">
+                            <col>
+                        </colgroup>
+                        <thead id="body_head1" style="display: none;">
+                        <tr>
+                            <td rowspan="2" class="table_cal" bgcolor="#f9f9f9">
+                                <div align="center">Номер платежа</div>
+                            </td>
+                            <td colspan="2" class="table_cal" bgcolor="#f9f9f9">
+                                <div align="center">Возмещение стоимости</div>
+                            </td>
+                            <td colspan="2" class="table_cal" bgcolor="#f9f9f9">
+                                <div align="center">Ставка по лизингу</div>
+                            </td>
+                            <td colspan="2" class="table_cal" bgcolor="#f9f9f9">
+                                <div align="center">Лизинговый платеж</div>
+                            </td>
+                            <td rowspan="2" class="table_cal" bgcolor="#ebf5f0" width="100">
+                                <div align="center">Всего платежей
+                                    <br> с НДС</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="table_cal" bgcolor="#f9f9f9">
+                                <div align="center">Сумма без НДС</div>
+                            </td>
+                            <td class="table_cal" bgcolor="#f9f9f9">
+                                <div align="center">Сумма НДС</div>
+                            </td>
+                            <td class="table_cal" bgcolor="#f9f9f9">
+                                <div align="center">Сумма без НДС</div>
+                            </td>
+                            <td class="table_cal" bgcolor="#f9f9f9">
+                                <div align="center">Сумма НДС</div>
+                            </td>
+                            <td class="table_cal" bgcolor="#f9f9f9">
+                                <div align="center">Сумма без НДС</div>
+                            </td>
+                            <td class="table_cal" bgcolor="#f9f9f9">
+                                <div align="center">Сумма НДС</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="table_cal">
+                                <div align="center">1</div>
+                            </td>
+                            <td class="table_cal">
+                                <div align="center">2</div>
+                            </td>
+                            <td class="table_cal">
+                                <div align="center">3 (2*20 %)</div>
+                            </td>
+                            <td class="table_cal">
+                                <div align="center">4</div>
+                            </td>
+                            <td class="table_cal">
+                                <div align="center">5 <span id="title_leasing_rate_nds">(4*20 %)</span></div>
+                            </td>
+                            <td class="table_cal">
+                                <div align="center">6 (2+4)</div>
+                            </td>
+                            <td class="table_cal">
+                                <div align="center">7 (3+5)</div>
+                            </td>
+                            <td class="table_cal">
+                                <div align="center">8 (6+7)</div>
+                            </td>
+                        </tr>
+                        </thead>
+                        <thead id="body_head2" style="display: table-header-group;">
+                        <tr>
+                            <td class="table_cal" bgcolor="#f9f9f9">
+                                <div align="center">Номер платежа</div>
+                            </td>
+                            <td class="table_cal" bgcolor="#f9f9f9">
+                                <div align="center">Возмещение стоимости</div>
+                            </td>
+                            <td class="table_cal" bgcolor="#f9f9f9">
+                                <div align="center">Процентная ставка по лизингу</div>
+                            </td>
+                            <td class="table_cal bg-orange-100" bgcolor="#ebf5f0" width="150">
+                                <div align="center">Итоговый лизинговый платеж
+                                    <br> с НДС</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="table_cal border-b-2 border-r-2">
+                                <div align="center">1</div>
+                            </td>
+                            <td class="table_cal border-b-2 border-r-2">
+                                <div align="center">2</div>
+                            </td>
+                            <td class="table_cal border-b-2 border-r-2">
+                                <div align="center">3</div>
+                            </td>
+                            <td class="table_cal border-b-2 border-r-2">
+                                <div align="center">4 (2+3)</div>
+                            </td>
+                        </tr>
+                        </thead>
+                        <tbody id="body_id">
+                        <tr>
+                            <td colspan="4" align="center" id="body_tip">Введите исходные данные и нажмите "Рассчитать".</td>
+                        </tr>
+                        </tbody>
+                        <tfoot id="foot_id"></tfoot>
+                    </table>
+                </div>
+
+                <br>
+            </div>
+    
+            
+    
+    
+    
+    
+        </div>
+        <div class="bread_crumbs">
+            <a href="#" onclick="window.print(); return false;" class="print rounded-full py-2 px-3 uppercase text-xs font-bold cursor-pointer tracking-wider bg-gray-100" target="_blank"><i class="ico-print"></i><span>Версия для печати</span></a>
+            <ul>
+
+
+            </ul>
+        </div>
+    
+    </div>
+    
+</body>
+<script th:src="@{/js/validator.js}"></script>
+<script th:src="@{/js/script.js}"></script>
+</html>

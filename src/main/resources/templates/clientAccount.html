@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{admin :: adminHead}">
+</head>
+
+<body class="bg-white font-serif font-light text-white">
+	<div class="bg-[url('/images/bgHeader.jpg')] bg-[position:center] bg-fixed bg-[size:cover]"
+		th:fragment="navbar-admin">
+		<div class="bg-opacity-75 bg-orange-600">
+			<div class="bg-transparent container px-10 pt-5 pb-10 m-auto">
+				<div class="flex items-center py-1 justify-between relative">
+					<div class="flex items-center">
+						<a th:href="@{/admin/realtors}" class="mr-5 text-xl uppercase text-opacity-60 text-white font-semibold hover:tracking-[0.07em] hover:text-opacity-100 hover:scale-110 duration-300 ease-in-out">Риелторы</a>
+						<a th:href="@{/admin/clients}" class="mr-5 text-xl uppercase text-white font-semibold hover:tracking-[0.07em] hover:text-opacity-100 hover:scale-110 duration-300 ease-in-out">Клиенты</a>
+						<a th:href="@{/admin/advertisements}"
+							class="mr-5 text-xl uppercase text-opacity-60 text-white font-semibold hover:tracking-[0.07em] hover:text-opacity-100 hover:scale-110 duration-300 ease-in-out">Объявления</a>
+						<a th:href="@{/admin/statistics}"
+							class="text-xl uppercase text-opacity-60 text-white font-semibold hover:tracking-[0.07em] hover:text-opacity-100 hover:scale-110 duration-300 ease-in-out">Статистика</a>
+					</div>
+					<div th:replace="~{admin :: adminAccount}"></div>
+				</div>
+				
+	</div>
+	<div class="container px-10 py-5 pb-10 m-auto">
+		<div class="mb-3 mt-5 text-center uppercase text-[40px] text-gray-500 text-opacity-80 font-medium">Клиент</div>
+		<div th:object="${user}" class="px-[360px] space-y-3">
+			<input type="hidden" name="id" id="id" th:field="*{id}">
+			<div>
+				<label for="name" class="text-gray-500 text-opacity-80 uppercase">Имя</label>
+				<div th:text="*{name}" name="name" id="name"
+					class="py-3 px-5 w-full rounded-full bg-gray-500 bg-opacity-50 appearance-none"></div>
+			</div>
+			<div>
+				<label for="surname" class="text-gray-500 text-opacity-80 uppercase">Фамилия</label>
+				<div th:text="*{surname}" name="surname" id="surname"
+					class="py-3 px-5 w-full rounded-full bg-gray-500 bg-opacity-50 appearance-none"></div>
+			</div>
+			<div>
+				<label for="lastname" class="text-gray-500 text-opacity-80 uppercase">Отчество</label>
+				<div th:text="*{lastname}" name="lastname" id="lastname"
+					class="py-3 px-5 w-full rounded-full bg-gray-500 bg-opacity-50 appearance-none"></div>
+			</div>
+			<div>
+				<label for="phone" class="text-gray-500 text-opacity-80 uppercase">Номер телефона</label>
+				<div th:text="*{phone}" name="phone" id="phone"
+					class="py-3 px-5 w-full rounded-full bg-gray-500 bg-opacity-50 appearance-none"></div>
+			</div>
+			<div>
+				<label for="email" class="text-gray-500 text-opacity-80 uppercase">Email</label>
+				<div th:text="*{email}" name="email" id="email"
+					class="py-3 px-5 w-full rounded-full bg-gray-500 bg-opacity-50 appearance-none"></div>
+			</div>
+			<div>
+				<label for="username" class="text-gray-500 text-opacity-80 uppercase">Логин</label>
+				<div th:text="*{username}" name="username" id="username"
+					class="py-3 px-5 w-full rounded-full bg-gray-500 bg-opacity-50 appearance-none"></div>
+			</div>
+			<div>
+				<label for="status" class="text-gray-500 text-opacity-80 uppercase">Статус</label>
+				<div name="status" id="status"
+					th:class="*{status} ? 'p-4 text-green-400 py-3 px-5 w-full rounded-full bg-gray-500 bg-opacity-50 appearance-none' : 'p-4 text-red-600 py-3 px-5 w-full rounded-full bg-gray-500 bg-opacity-50 appearance-none' "
+					th:text="*{status} ? 'Активен' : 'Заблокирован' "></div>
+			</div>
+			<div class="pt-3">
+				<a th:href="@{/admin/clientAccount/delete(id=*{id})}"
+					class="block text-center w-full rounded-full bg-orange-700 text-lg uppercase hover:bg-orange-800 p-3 duration-300 ease-in-out focus:outline-none focus:shadow-outline">
+					Удалить
+				</a>
+			</div>
+			<div class="pt-0">
+				<a th:href="*{status} ? @{/admin/clientAccount/disactivate(id=*{id})} : @{/admin/clientAccount/activate(id=*{id})}"
+					class="block text-center w-full rounded-full bg-orange-700 text-lg uppercase hover:bg-orange-800 p-3 duration-300 ease-in-out focus:outline-none focus:shadow-outline"
+					th:text="*{status} ? 'Заблокировать' : 'Разблокировать'">
+				</a>
+			</div>
+		</div>
+	</div>
+</body>
+<script th:src="@{/js/script.js}"></script>
+</html>

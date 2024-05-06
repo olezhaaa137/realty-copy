@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{admin :: adminHead}">
+</head>
+
+<body class="bg-white font-serif font-light text-white">
+	<div class="bg-[url('/images/bgHeader.jpg')] bg-[position:center] bg-fixed bg-[size:cover]" th:fragment="navbar-admin">
+		<div class="bg-opacity-75 bg-orange-600">
+			<div class="bg-transparent container px-10 pt-5 pb-10 m-auto">
+				<div class="flex items-center py-1 justify-between relative">
+					<div class="flex items-center">
+						<a th:href="@{/admin/realtors}" class="mr-5 text-xl uppercase text-opacity-60 text-white font-semibold hover:tracking-[0.07em] hover:text-opacity-100 hover:scale-110 duration-300 ease-in-out">Риелторы</a>
+						<a th:href="@{/admin/clients}" class="mr-5 text-xl uppercase text-white font-semibold hover:tracking-[0.07em] hover:text-opacity-100 hover:scale-110 duration-300 ease-in-out">Клиенты</a>
+						<a th:href="@{/admin/advertisements}"
+							class="mr-5 text-xl uppercase text-opacity-60 text-white font-semibold hover:tracking-[0.07em] hover:text-opacity-100 hover:scale-110 duration-300 ease-in-out">Объявления</a>
+						<a th:href="@{/admin/statistics}" class="text-xl uppercase text-opacity-60 text-white font-semibold hover:tracking-[0.07em] hover:text-opacity-100 hover:scale-110 duration-300 ease-in-out">Статистика</a>
+					</div>
+					<div th:replace="~{admin :: adminAccount}"></div>
+				</div>
+				
+			</div>
+		</div>
+	</div>
+	<div class="container px-10 py-5 pb-10 m-auto">
+		<div class="mb-3 mt-5 text-center uppercase text-[40px] text-gray-500 text-opacity-80 font-medium">Клиенты</div>
+		<div class="flex items-center justify-end">
+			<form  method="get" th:action="@{/admin/findClients}" class="flex items-center">
+				<button type="submit">
+					<img th:src="@{/images/search.png}" class="w-[50px]"/>
+				</button>
+				<input type="text" th:name="findParam" id="findParam" class="ml-3 py-3 px-5 w-full rounded-full bg-gray-300 bg-opacity-100 appearance-none" placeholder="Поиск..." required="true" />
+				<a th:href="@{/admin/clients}">
+					<img th:src="@{/images/broom.png}" class="ml-3 w-[40px]"/>
+				</a>
+			</form>
+		</div>
+		<table class="w-full mt-5 table-auto border-collapse text-center" name="users" id="users">
+			<thead class="border-2 font-medium text-gray-500 border-gray-400">
+				<tr>
+					<th class="py-6 px-4">Логин</th>
+					<th class="py-6 px-4">Имя</th>
+					<th class="py-6 px-4">Фамилия</th>
+					<th class="py-6 px-4">Отчество</th>
+					<th class="py-6 px-4">Телефон</th>
+					<th class="py-6 px-4">Email</th>
+					<th class="py-6 px-4">Статус</th>
+				</tr>
+			</thead>
+			<tbody>
+				<th:block th:if="!${clients.isEmpty()}" th:each="client : ${clients}">
+					<tr class="cursor-pointer text-gray-500 border-gray-400 border-2 duration-300 ease-in-out hover:bg-gray-300">
+						<td class="p-4" th:text="${client.username}" th:href="@{/admin/clientAccount(id=${client.id})}"></td>
+						<td class="p-4" th:text="${client.name}"></td>
+						<td class="p-4" th:text="${client.surname}"></td>
+						<td class="p-4" th:text="${client.lastname}"></td>
+						<td class="p-4" th:text="${client.phone}"></td>
+						<td class="p-4" th:text="${client.email}"></td>
+						<td th:class="${client.status} ? 'p-4 text-green-400' : 'p-4 text-red-600' "  th:text="${client.status} ? 'Активен' : 'Заблокирован' "></td>
+					</tr>
+				</th:block>
+			</tbody>
+		</table>
+		<div class="mt-5 text-red-500 text-lg" th:if="${clients.isEmpty()}">Список пуст.</div>
+	</div>
+</body>
+<script th:src="@{/js/script.js}"></script>
+</html>

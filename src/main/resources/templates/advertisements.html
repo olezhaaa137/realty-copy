@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{realtor :: realtorHead}">
+</head>
+<body class="bg-white font-serif font-light text-white">
+	<div class="bg-[url('/images/bgHeader.jpg')] bg-[position:center] bg-fixed bg-[size:cover]">
+		<div class="bg-opacity-75 bg-orange-600">
+			<div class="bg-transparent container px-10 pt-5 pb-10 m-auto">
+				<div class="flex items-center py-1 justify-between relative">
+					<div class="flex items-center">
+						<a th:href="@{/realtor/advertisements}"
+							class="mr-5 text-xl uppercase text-opacity-100 text-white font-semibold hover:tracking-[0.07em] hover:text-opacity-100 hover:scale-110 duration-300 ease-in-out">Объявления</a>
+						<a th:href="@{/realtor/schedule}"
+							class="mr-5 text-xl uppercase text-opacity-60 text-white font-semibold hover:tracking-[0.07em] hover:text-opacity-100 hover:scale-110 duration-300 ease-in-out">Расписание</a>
+					</div>
+					<div th:replace="~{realtor :: realtorAccount}">
+					</div>
+				</div>
+				
+		</div>
+	</div>
+	<div class="container px-10 py-5 pb-10 m-auto">
+		<div class="mb-3 mt-5 text-center uppercase text-[40px] text-gray-950 text-opacity-80 font-medium">Объявления</div>
+		<div class="flex items-center justify-between">
+			<a th:href="@{/realtor/addAdvertisement}" class="rounded-full bg-orange-700 text-lg uppercase hover:bg-orange-800 py-3 px-6 duration-300 ease-in-out focus:outline-none focus:shadow-outline">
+				Разместить объявление
+			</a>
+			<div class="flex items-center justify-between">
+				<a th:href="@{/realtor/advertisements}" class="mr-2 rounded-full bg-orange-700 text-lg uppercase hover:bg-orange-800 py-3 px-6 duration-300 ease-in-out focus:outline-none focus:shadow-outline">
+					Все объявления
+				</a>
+				<a th:href="@{/realtor/myAdvertisements}" class="rounded-full bg-orange-700 text-lg uppercase hover:bg-orange-800 py-3 px-6 duration-300 ease-in-out focus:outline-none focus:shadow-outline">
+					Мои объявления
+				</a>
+			</div>
+		</div>
+		<div class="flex items-center justify-between mt-5">
+			<form  method="get" th:action="${my} ? @{/realtor/findAdvertisementsMy} : @{/realtor/findAdvertisements}" class="flex items-center">
+				<button type="submit">
+					<img th:src="@{/images/search.png}" class="w-[50px]"/>
+				</button>
+				<input type="text" th:name="findParam" id="findParam" class="ml-3 py-3 px-5 w-full rounded-full bg-gray-300 bg-opacity-100 appearance-none" placeholder="Поиск..." required />
+				<a th:href="${my} ? @{/realtor/myAdvertisements} : @{/realtor/advertisements}">
+					<img th:src="@{/images/broom.png}" class="ml-3 w-[40px]"/>
+				</a>
+			</form>
+			<form method="get" th:action="${my} ? @{/realtor/filterAdvertisementsMy} : @{/realtor/filterAdvertisements}">
+				<div class="flex items-center">
+					<button type="submit">
+						<img th:src="@{/images/filter.png}" class="w-[40px]"/>
+					</button>
+					<input  class="ml-3 py-3 px-5 w-[150px] rounded-full bg-gray-300 bg-opacity-100 appearance-none" type="text" th:name="priceFrom" placeholder="Цена от" required="true" pattern="^\d+([.]{1}\d{1,2})?$"/>
+					<input  class="ml-3 py-3 px-5 w-[150px] rounded-full bg-gray-300 bg-opacity-100 appearance-none" type="text" th:name="priceTo" placeholder="Цена до" required="true" pattern="^\d+([.]{1}\d{1,2})?$"/>
+				</div>
+				<div class="ml-12 text-red-500" 
+					th:if="${err}"
+					th:text="${err}">
+				</div>
+			</form>                
+			<form method="get" th:action="${my} ? @{/realtor/sortAdvertisementsMy} : @{/realtor/sortAdvertisements}">
+				<div class="flex items-center relative">
+					<button type="submit">
+						<img th:src="@{/images/sort.png}" class="w-[40px]"/>
+					</button>
+					<select th:name="sort" class="ml-3 block py-3 px-5 pr-6 appearance-none w-full bg-gray-500 bg-opacity-50 rounded-full focus:outline-none focus:shadow-outline cursor-pointer"> 
+						<option th:value="1">Сначала самые дешевые</option> 
+						<option th:value="2">Сначала самые дорогие</option>
+						<option th:value="3">Сначала самые новые</option>  
+						<option th:value="4">Сначала самые старые</option>  
+						<option th:if="${my}" th:value="5">Подтвержденные</option>  
+						<option th:if="${my}" th:value="6">На обработке</option>  
+						<option th:if="${my}" th:value="7">Проданы</option>  
+						<option th:if="${my}" th:value="8">Ошибочные</option>  
+					</select> 
+					<div class="pointer-events-none absolute inset-y-0 right-1 flex items-center px-2 text-gray-700">
+						<svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+					</div>
+				</div>
+			</form>
+		</div>
+		<div class="flex flex-wrap justify-between">
+			<a th:href="${my} ? @{/realtor/getAdvertisementMy(id=${adv.id})} : @{/realtor/getAdvertisement(id=${adv.id})}" class="mt-10 relative" th:each="adv : ${advertisements}">
+				<div th:if="${my}" th:text="${adv.status}" class="bg-black bg-opacity-50 absolute top-5 right-5 p-3"></div>
+				<img th:each="photo,i : ${adv.photos}" th:src="${photo.image}" th:if="${i.index}==0" class="rounded-t-md w-[500px] h-[300px] object-cover">
+				<div class="bg-gray-500 bg-opacity-50 p-5 rounded-b-md max-w-[500px]">
+					<div th:text="${adv.name}" class="h-[70px] text-xl font-semibold"></div>
+					<div th:text="${adv.type}" class="text-lg"></div>
+					<div class="flex items-center">
+						<div th:text="${adv.totalArea}+' м²'" class="text-lg mr-2"></div>
+						<div th:if="${adv.floor}" th:text="${adv.type.equals('Дом')} ? ${adv.floor}+' этаж(а)' : (${adv.type.equals('Квартира')} ? ${adv.floor}+' этаж')" class="text-lg"></div>
+					</div>
+					<div class="mt-2 flex items-center justify-between">
+						<div th:text="${formatter.format(adv.createdDate)}" class="text-md font-light italic"></div>
+						<div th:text="${adv.price}+' BYN'" class="text-lg font-semibold"></div>
+					</div>
+				</div>
+			</a>
+		</div>
+		<div class="mt-5 text-red-500 text-lg" th:if="${advertisements.isEmpty()}">Список пуст.</div>
+	</div>
+</body>
+<script th:src="@{/js/script.js}"></script>
+</html>

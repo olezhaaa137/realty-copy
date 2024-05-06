@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{client :: clientHead}">
+</head>
+<body>
+ <div  th:each="leasOption : ${leasComparisonOptions.leasOptions}">
+  <label for="cost">Стоимость: </label>
+  <p id="cost" th:text="${leasOption.cost}"></p>
+
+  <label for="term">Срок лизинга: </label>
+  <p id="term" th:text="${leasOption.term}"></p>
+
+  <label for="leaseRate">Ставка по лизингу: </label>
+  <p id="leaseRate" th:text="${leasOption.leaseRate}"></p>
+
+  <label for="advance">Авансовый платёж: </label>
+  <p id="advance" th:text="${leasOption.advance}"></p>
+
+  <label for="redemption">Выкупная стоимость: </label>
+  <p id="redemption" th:text="${leasOption.redemption}"></p>
+
+  <label for="compensation">Возмещение стоимости: </label>
+  <p id="compensation" th:text="${leasOption.compensation}"></p>
+
+  <label for="resultedLeaseRate">Процентная ставка по лизингу: </label>
+  <p id="resultedLeaseRate" th:text="${leasOption.resultedLeaseRate}"></p>
+
+  <label for="resultCost">Итоговый лизинговый платеж: </label>
+  <p id="resultCost" th:text="${leasOption.resultCost}"></p>
+ </div>
+ <textarea th:text="${aiRequest}">
+   Запрос к помошнику.
+ </textarea>
+ <textarea th:text="${aiResponse}">
+   Ответ от помошника.
+ </textarea>
+ <form  method="POST" th:action="@{/client/compareLeaseOptions}">
+  <button type="submit">Сравнить варианты лизинга</button>
+ </form>
+</body>
+</html>

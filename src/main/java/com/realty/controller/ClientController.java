@@ -30,7 +30,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 @RequestMapping("/client")
-@SessionAttributes("leasComparison")
+@SessionAttributes("leasComparisonOptions")
 public class ClientController {
 
 	@Autowired
@@ -58,7 +58,16 @@ public class ClientController {
 		leasComparisonOptions.addLeasOption(leasOption);
 		System.out.println(leasOption.toString());
 		leasComparisonOptions.printObj();
-		return "redirect:/client/leasingCalc";
+		return "client.leasingComparison";
+	}
+
+	@PostMapping("/compareLeaseOptions")
+	public String addAdvertisement(@ModelAttribute LeasComparisonOptions leasComparisonOptions, Model model) {
+		String response = leasComparisonOptions.getResponseFromGPT();
+		System.out.println("Ответ от гпт: " + response);
+		model.addAttribute("aiRequest", leasComparisonOptions.getRequestToGPT());
+		model.addAttribute("aiResponse", response);
+		return "client.leasingComparison";
 	}
 
 	@GetMapping

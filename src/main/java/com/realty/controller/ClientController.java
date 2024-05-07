@@ -58,6 +58,11 @@ public class ClientController {
 		leasComparisonOptions.addLeasOption(leasOption);
 		System.out.println(leasOption.toString());
 		leasComparisonOptions.printObj();
+		return "redirect:/client/leasingComparison";
+	}
+
+	@GetMapping("/leasingComparison")
+	public String leasComparison(){
 		return "client.leasingComparison";
 	}
 

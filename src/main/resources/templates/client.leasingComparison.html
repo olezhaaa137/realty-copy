@@ -1,41 +1,67 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
 <head th:replace="~{client :: clientHead}">
-</head>
 <body>
- <div  th:each="leasOption : ${leasComparisonOptions.leasOptions}">
-  <label for="cost">Стоимость: </label>
-  <p id="cost" th:text="${leasOption.cost}"></p>
+<div>
+ <div class="bg-opacity-75 bg-orange-600">
+  <div class="bg-transparent container px-10 pt-5 pb-10 m-auto">
+   <div class="flex items-center py-1 justify-between relative">
+    <div class="flex items-center">
+     <a th:href="@{/client/advertisements}"
+        class="mr-5 text-xl uppercase text-opacity-100 text-white font-semibold hover:tracking-[0.07em] hover:text-opacity-100 hover:scale-110 duration-300 ease-in-out">Объявления</a>
+     <a th:href="@{/client/schedule}"
+        class="mr-5 text-xl uppercase text-opacity-60 text-white font-semibold hover:tracking-[0.07em] hover:text-opacity-100 hover:scale-110 duration-300 ease-in-out">Расписание</a>
+    </div>
+    <div th:replace="~{client :: clientAccount}">
+    </div>
+   </div>
 
-  <label for="term">Срок лизинга: </label>
-  <p id="term" th:text="${leasOption.term}"></p>
-
-  <label for="leaseRate">Ставка по лизингу: </label>
-  <p id="leaseRate" th:text="${leasOption.leaseRate}"></p>
-
-  <label for="advance">Авансовый платёж: </label>
-  <p id="advance" th:text="${leasOption.advance}"></p>
-
-  <label for="redemption">Выкупная стоимость: </label>
-  <p id="redemption" th:text="${leasOption.redemption}"></p>
-
-  <label for="compensation">Возмещение стоимости: </label>
-  <p id="compensation" th:text="${leasOption.compensation}"></p>
-
-  <label for="resultedLeaseRate">Процентная ставка по лизингу: </label>
-  <p id="resultedLeaseRate" th:text="${leasOption.resultedLeaseRate}"></p>
-
-  <label for="resultCost">Итоговый лизинговый платеж: </label>
-  <p id="resultCost" th:text="${leasOption.resultCost}"></p>
+  </div>
  </div>
- <textarea th:text="${aiRequest}">
-   Запрос к помошнику.
- </textarea>
- <textarea th:text="${aiResponse}">
-   Ответ от помошника.
- </textarea>
+</div>
+<br><br>
+ <div class="flex items-center justify-around font-serif">
+  <div class="border-solid border-2 rounded-md bg-orange-100" th:each="leasOption : ${leasComparisonOptions.leasOptions}">
+   <label for="cost">Стоимость: </label>
+   <p id="cost" th:text="${leasOption.cost + ' рублей'}"></p>
+
+   <label for="term">Срок лизинга: </label>
+   <p id="term" th:text="${leasOption.term + ' месяцев'}"></p>
+
+   <label for="leaseRate">Ставка по лизингу: </label>
+   <p id="leaseRate" th:text="${leasOption.leaseRate + ' %'}"></p>
+
+   <label for="advance">Авансовый платёж: </label>
+   <p id="advance" th:text="${leasOption.advance + ' %'}"></p>
+
+   <label for="redemption">Выкупная стоимость: </label>
+   <p id="redemption" th:text="${leasOption.redemption + ' %'}"></p>
+
+   <label for="compensation">Возмещение стоимости: </label>
+   <p id="compensation" th:text="${leasOption.compensation + ' рублей'}"></p>
+
+   <label for="resultedLeaseRate">Процентная ставка по лизингу: </label>
+   <p id="resultedLeaseRate" th:text="${leasOption.resultedLeaseRate + ' %'}"></p>
+
+   <label for="resultCost">Итоговый лизинговый платеж: </label>
+   <p id="resultCost" th:text="${leasOption.resultCost + ' рублей'}"></p>
+  </div>
+ </div>
+<div class="flex justify-center mt-8">
+ <div class="w-3/4 flex flex-col gap-4">
+  <textarea th:text="${aiRequest}" class="w-full border-2 rounded-md p-2 h-52" placeholder="Запрос к помощнику"></textarea>
+  <textarea th:text="${aiResponse}" class="w-full border-2 rounded-md p-2 h-52" placeholder="Ответ от помощника"></textarea>
+ </div>
+</div>
+
+
  <form  method="POST" th:action="@{/client/compareLeaseOptions}">
-  <button type="submit">Сравнить варианты лизинга</button>
+  <button type="submit"
+          class="mt-8 w-full rounded-full bg-oragne-700 text-lg uppercase bg-orange-500 hover:bg-orange-800 p-3 duration-300 ease-in-out focus:outline-none focus:shadow-outline"
+  >Сравнить варианты лизинга</button>
  </form>
+
 </body>
+<script th:src="@{/js/script.js}"></script>
 </html>

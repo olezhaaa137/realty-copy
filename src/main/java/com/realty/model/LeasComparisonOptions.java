@@ -27,14 +27,14 @@ public class LeasComparisonOptions {
         request.append("Сравни следующие варианты лизинга:");
         for (int i = 0; i < leasOptions.size(); i++) {
             request.append(i+1 + ". ");
-            request.append("Стоимость объекта покупки: "+leasOptions.get(i).getCost() + "рублей, ");
-            request.append("Срок лизинга: "+leasOptions.get(i).getTerm() + "месяцев, ");
-            request.append("Ставка по лизингу: "+leasOptions.get(i).getLeaseRate() + "процентов, ");
-            request.append("Авансовый платёж: "+leasOptions.get(i).getAdvance() + "процентов, ");
-            request.append("Выкупная стоимость: "+leasOptions.get(i).getRedemption() + "процентов, ");
-            request.append("Возмещение стоимости: "+leasOptions.get(i).getCompensation() + "рублей, ");
-            request.append("Процентная ставка по лизингу: "+leasOptions.get(i).getResultedLeaseRate() + "процентов, ");
-            request.append("Итоговый лизинговый платеж: "+leasOptions.get(i).getResultCost() + "рублей; ");
+            request.append("Стоимость объекта покупки: "+leasOptions.get(i).getCost() + " рублей, ");
+            request.append("Срок лизинга: "+leasOptions.get(i).getTerm() + " месяцев, ");
+            request.append("Ставка по лизингу: "+leasOptions.get(i).getLeaseRate() + " процентов, ");
+            request.append("Авансовый платёж: "+leasOptions.get(i).getAdvance() + " процентов, ");
+            request.append("Выкупная стоимость: "+leasOptions.get(i).getRedemption() + " процентов, ");
+            request.append("Возмещение стоимости: "+leasOptions.get(i).getCompensation() + " рублей, ");
+            request.append("Процентная ставка по лизингу: "+leasOptions.get(i).getResultedLeaseRate() + " процентов, ");
+            request.append("Итоговый лизинговый платеж: "+leasOptions.get(i).getResultCost() + " рублей; ");
             if (i!=leasOptions.size()-1){
                 request.append(" или стоит выбрать вот этот вариант ");
             }
@@ -48,6 +48,9 @@ public class LeasComparisonOptions {
 
     public String getResponseFromGPT() {
         makeRequest();
-        return new GPTService().makeRequest(requestToGPT);
+        String response = new GPTService().makeRequest(requestToGPT);
+        response = response.replace("\\n", "\n");
+        System.out.println(response);
+        return response;
     }
 }

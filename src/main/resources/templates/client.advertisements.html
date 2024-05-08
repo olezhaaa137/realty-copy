@@ -78,6 +78,16 @@
 						<div th:text="${adv.price}+' BYN'" class="text-lg font-semibold"></div>
 					</div>
 				</div>
+				<form method="POST" th:action="@{/client/addToFavorite}" th:object="${adv}">
+					<input type="hidden" name="id" th:value="${adv.id}">
+					<button th:if="${likedAdvertisementsService.isNotLiked(user.id,adv)}" class="ml-5 print rounded-full py-2 px-3 uppercase text-xs font-bold cursor-pointer tracking-wider bg-gray-500"
+							type="submit">Like</button>
+				</form>
+				<form method="POST" th:action="@{/client/removeFromFavorite}" th:object="${adv}">
+					<input type="hidden" name="id" th:value="${adv.id}">
+					<button th:if="${likedAdvertisementsService.isLiked(user.id,adv)}" class="ml-5 print rounded-full py-2 px-3 uppercase text-xs font-bold cursor-pointer tracking-wider bg-red-400"
+							type="submit">Liked &#10003;</button>
+				</form>
 			</a>
 		</div>
 		<div class="mt-5 text-red-500 text-lg" th:if="${advertisements.isEmpty()}">Список пуст.</div>

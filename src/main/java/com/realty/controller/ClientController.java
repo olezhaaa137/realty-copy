@@ -9,16 +9,16 @@ import java.net.URLConnection;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-import com.realty.model.Advertisement;
-import com.realty.model.LeasComparisonOptions;
-import com.realty.model.LeasOption;
+import com.realty.model.*;
+import com.realty.repo.AdvertisementRepository;
+import com.realty.repo.LikedAdvertisementsRepo;
+import com.realty.service.LikedAdvertisementsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import com.realty.model.User;
 import com.realty.service.AdvertisementService;
 import com.realty.service.ScheduleService;
 import com.realty.service.UserService;
@@ -41,6 +41,13 @@ public class ClientController {
 
 	@Autowired
 	private ScheduleService scheduleService;
+
+	@Autowired
+	private LikedAdvertisementsService likedAdvertisementsService;
+	@Autowired
+	private AdvertisementRepository advertisementRepository;
+	@Autowired
+	private LikedAdvertisementsRepo likedAdvertisementsRepo;
 
 	@ModelAttribute(name="leasComparisonOptions")
 	public LeasComparisonOptions comparison(){
@@ -103,10 +110,35 @@ public class ClientController {
 	}
 
 	@GetMapping("/advertisements")
-	public String advertisements(Model model) {
+	public String advertisements(Model model,@AuthenticationPrincipal User user) {
+		model.addAttribute("user", user);
 		model.addAttribute("advertisements", advertisementService.getActiveAdvertisements());
 		model.addAttribute("formatter", DateFormatter.getInstance());
+		model.addAttribute("likedAdvertisementsService", likedAdvertisementsService);
 		return "client.advertisements";
+	}
+
+	@PostMapping("/addToFavorite")
+	public String addToFavorite(Advertisement advertisement, @AuthenticationPrincipal User user){
+
+		LikedAdvertisements likedAdvertisements = LikedAdvertisements.builder().advertisement(advertisementRepository.findById(advertisement.getId()).get())
+				.client(user).build();
+		likedAdvertisementsRepo.save(likedAdvertisements);
+		return "redirect:/client/advertisements";
+
+	}
+
+	@PostMapping("/removeFromFavorite")
+	public String removeFromFavorite(Advertisement advertisement, @AuthenticationPrincipal User user){
+
+		LikedAdvertisements likedAdvertisements = likedAdvertisementsRepo.findByAdvertisementAndClient(advertisement, user);
+
+		// Если объект существует, удаляем его
+		if (likedAdvertisements != null) {
+			likedAdvertisementsRepo.delete(likedAdvertisements);
+		}
+		return "redirect:/client/advertisements";
+
 	}
 
 	@GetMapping("/delAccount")

@@ -76,6 +76,65 @@
 					<div class="text-xl font-semibold">Описание</div>
 					<div th:text="${advertisement.description}"></div>
 				</div>
+				<div class="mb-3 mt-5 uppercase text-3xl text-gray-500 text-opacity-80 font-medium">Комментарии</div>
+				<div th:each="createdComment: ${createdComments}" class="text-black rounded border-2 p-10 mb-5">
+					<div class="flex justify-between items-center">
+						<div class="flex items-center">
+							<img class="mr-3 w-8 h-8 rounded-full"
+								 src="https://flowbite.com/docs/images/people/profile-picture-2.jpg"
+								 alt="Profile Picture">
+							<div>
+								<p th:text="${createdComment.client.name + ' ' + createdComment.client.surname}" class="text-sm font-bold"></p>
+								<p th:text="${createdComment.createdDate}" class="text-xs text-gray-600"></p>
+							</div>
+						</div>
+						<!-- Dropdown menu -->
+						<div class="relative">
+							<button id="dropdownComment1Button" data-dropdown-toggle="dropdownComment1"
+									class="inline-flex items-center p-2 text-sm font-medium text-center text-gray-500 dark:text-gray-400 bg-white rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-50 dark:bg-gray-900 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+									type="button">
+								<svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+									 viewBox="0 0 16 3">
+									<path
+											d="M2 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm6.041 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM14 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Z"/>
+								</svg>
+								<span class="sr-only">Comment settings</span>
+							</button>
+							<div id="dropdownComment1"
+								 class="hidden z-10 w-36 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600">
+								<ul class="py-1 text-sm text-gray-700 dark:text-gray-200"
+									aria-labelledby="dropdownMenuIconHorizontalButton">
+									<li>
+										<a href="#"
+										   class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Edit</a>
+									</li>
+									<li>
+										<a href="#"
+										   class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Remove</a>
+									</li>
+									<li>
+										<a href="#"
+										   class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Report</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<p th:text="${createdComment.content}" class="text-gray-500 mt-4"></p>
+				</div>
+				<form method="POST" th:action="@{/client/addComment}" class="mb-6" th:object="${comment}">
+					<div class="py-2 px-4 mb-4 bg-white rounded-lg rounded-t-lg border border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+						<input type="hidden" name="advertisementId" th:value="${advertisement.id}">
+						<label for="comment" class="sr-only">Your comment</label>
+						<textarea id="comment" rows="6"
+								  class="px-0 w-full text-sm text-gray-900 border-0 focus:ring-0 focus:outline-none dark:text-white dark:placeholder-gray-400 dark:bg-gray-800"
+								  th:field="*{content}" placeholder="Write a comment..." required></textarea>
+					</div>
+					<button type="submit"
+							class="text-base inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-gray-300 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-gray-400">
+						Прокомментировать
+					</button>
+				</form>
 				<div class="mb-3 mt-5 uppercase text-3xl text-gray-500 text-opacity-80 font-medium">Мы находимся тут</div>
 				<iframe src="https://yandex.ru/map-widget/v1/?um=constructor%3A95dc4d233d60320c32a13975bf2a377272ec7cf41e35f2f80e86bb71762c39be&amp;source=constructor" width="500" height="400" frameborder="0"></iframe>
 			</div>
@@ -91,7 +150,7 @@
 						<input type="hidden" th:name="id" th:value="${advertisement.id}" id="id">
 						<div class="mb-3 flex items-center" th:if="${dates} and !${dates.isEmpty()}" id="dateDiv" name="dateDiv">
 							<div class="relative">
-								<label for="date" class="uppercase">Выберите дату</label>
+								<label for="dateClient" class="uppercase">Выберите дату</label>
 								<select th:name="date" class="block py-3 px-5 appearance-none w-full bg-gray-500 bg-opacity-50 rounded-full focus:outline-none focus:shadow-outline cursor-pointer" id="dateClient" th:href="${advertisement.id}">
 									<option th:each="date : ${dates}" th:value="${date}" th:text="${date}">
 									</option>

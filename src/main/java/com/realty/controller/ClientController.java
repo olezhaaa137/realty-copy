@@ -11,6 +11,7 @@ import java.time.LocalTime;
 
 import com.realty.model.*;
 import com.realty.repo.AdvertisementRepository;
+import com.realty.repo.CommentRepo;
 import com.realty.repo.LikedAdvertisementsRepo;
 import com.realty.service.LikedAdvertisementsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +49,9 @@ public class ClientController {
 	private AdvertisementRepository advertisementRepository;
 	@Autowired
 	private LikedAdvertisementsRepo likedAdvertisementsRepo;
+
+	@Autowired
+	private CommentRepo commentRepo;
 
 	@ModelAttribute(name="leasComparisonOptions")
 	public LeasComparisonOptions comparison(){
@@ -141,6 +145,18 @@ public class ClientController {
 
 	}
 
+	@PostMapping("/addComment")
+	public String addComment(Comment comment, @RequestParam("advertisementId") Long advertisementId,
+							 @AuthenticationPrincipal User user, Model model){
+		Advertisement advertisement = advertisementService.getAdvertisement(advertisementId);
+		comment.setAdvertisement(advertisement);
+		comment.setClient(user);
+		comment.setCreatedDate(LocalDate.now());
+		commentRepo.save(comment);
+		return "redirect:/client/getAdvertisement?id=" + advertisement.getId();
+
+	}
+
 	@GetMapping("/delAccount")
 	public String delAccount(HttpServletRequest req, @AuthenticationPrincipal User user) throws ServletException {
 		req.logout();
@@ -150,7 +166,11 @@ public class ClientController {
 
 	@GetMapping("/getAdvertisement")
 	public String getAdvertisement(Model model, Long id) {
-		model.addAttribute("advertisement", advertisementService.getAdvertisement(id));
+		Advertisement advertisement = advertisementService.getAdvertisement(id);
+		model.addAttribute("advertisement", advertisement);
+		model.addAttribute("comment", new Comment());
+		model.addAttribute("createdComments", commentRepo.findByAdvertisement(advertisement));
+		System.out.println(commentRepo.findByAdvertisement(advertisement).toString());
 		return "client.advertisement";
 	}
 
@@ -186,6 +206,8 @@ public class ClientController {
 	public String addSchedule(Model model, Long id) {
 		model.addAttribute("look", "look");
 		model.addAttribute("dates", scheduleService.getDate(id));
+		model.addAttribute("comment", new Comment());
+		model.addAttribute("createdComments", commentRepo.findByAdvertisement(advertisementService.getAdvertisement(id)));
 		if(scheduleService.getDate(id).size()>0) {
 			model.addAttribute("times", scheduleService.getTime(id, scheduleService.getDate(id).get(0).toString()));
 		}

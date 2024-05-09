@@ -39,11 +39,7 @@ public class User implements UserDetails {
 	@NotNull
 	private String lastname;
 	
-	@NotNull
-	private String phone;
 
-	@NotNull
-	private String email;
 
 	@Column(unique = true)
 	@NotNull

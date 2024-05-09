@@ -47,7 +47,7 @@ public class Advertisement implements Serializable{
 	
 	private Integer totalArea;
 	
-	private Integer floor;
+
 	
 	private String renovations;
 	
@@ -59,8 +59,7 @@ public class Advertisement implements Serializable{
 	
 	@Column(length = Integer.MAX_VALUE)
 	private String description;
-	
-	private String geoposition;
+
 	
 	private String status;
 	
